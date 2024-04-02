@@ -7,7 +7,6 @@ namespace Genspil
         static void Main(string[] args)
         {
             GameList game = new();
-            OrderList order = new OrderList();
 
             // Menu rykkes til en class Menu
             bool exit = false;
@@ -64,8 +63,6 @@ namespace Genspil
                     case 6:
                         game.ReadFile();
                         game.ShowLines();
-                        order.AddOrder();
-                        order.WriteFileOrder();
                         break;
                     default:
                         Console.Write("Forkert input, prøv igen!");
