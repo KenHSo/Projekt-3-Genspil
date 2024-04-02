@@ -6,8 +6,8 @@ namespace Genspil
     {
         static void Main(string[] args)
         {
-            BoardGameList game = new();
-
+            GameList game = new();
+            OrderList order = new OrderList();
 
             // Menu rykkes til en class Menu
             bool exit = false;
@@ -22,6 +22,7 @@ namespace Genspil
                 Console.WriteLine("3. Tilføj spil");
                 Console.WriteLine("4. Fjern spil");
                 Console.WriteLine("5. Opdater spil");
+                Console.WriteLine("6. Tilføj ordre");
 
 
                 Console.WriteLine("\n(Tryk menupunkt eller 0 for at afslutte)");
@@ -59,6 +60,12 @@ namespace Genspil
                         game.ShowGameItems();
                         game.Update();
                         game.WriteLineToFile();
+                        break;
+                    case 6:
+                        game.ReadFile();
+                        game.ShowLines();
+                        order.AddOrder();
+                        order.WriteFileOrder();
                         break;
                     default:
                         Console.Write("Forkert input, prøv igen!");

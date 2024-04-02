@@ -19,20 +19,22 @@ namespace Genspil
     // gameItems.txt = ren kommasepareret fil - udskrivning af data klares med $ stringinterpolation
 
 
-    //todo:1 Exception handling + brugerinput
    
-    //todo:4 Lav Søgning (på et GameItem field) + kombination af fields
-    //todo:5 Lav Opdatering
-    //todo:6 Lav Sortering efter navn & genre 
-    //todo:7 DateTime created / DateTime updated - virker måske?
-    //todo:8 Forspørgsler håndteres i en anden klasse end GameItem
+    //todo: Lav Søgning (på et GameItem field) + kombination af fields
+    //todo: Lav Opdatering
 
 
-    public class BoardGameList
+    //todo: Exception handling + brugerinput
+    //todo: Lav Sortering efter navn & genre 
+    //todo: DateTime created / DateTime updated - virker måske?
+    //todo: Forspørgsler håndteres i en anden klasse end GameItem
+
+
+    public class GameList
     {
 
         private List<GameItem> _gameItems = new List<GameItem>();
-        private List<string> _lines = new List<string>();
+        internal List<string> _lines = new List<string>();
 
         private string _path = @"c:\temp\gameItems.txt";
 
@@ -164,14 +166,14 @@ namespace Genspil
             _gameItems.Clear();
 
         }
-        //public void ShowLines()
-        //{
-        //    // Print each element in _lines           
-        //    foreach (string line in _lines)
-        //    {
-        //        Console.WriteLine(line);
-        //    }
-        //}
+        public void ShowLines()
+        {
+            // Print each element in _lines           
+            foreach (string line in _lines)
+            {
+                Console.WriteLine(line);
+            }
+        }
 
 
 
