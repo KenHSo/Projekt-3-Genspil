@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Linq.Expressions;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -19,36 +20,31 @@ namespace Genspil
     // Properties for at få adgang til GameItem. osv.
     // gameItems.txt = ren kommasepareret fil - udskrivning af data klares med $ stringinterpolation
 
-    //todo: Lav Søgning (på et GameItem field) + kombination af fields
-    //todo: Lav Opdatering
 
-    //todo: Exception handling + brugerinput
+    //todo: Forspørgsler håndteres i requestList og requestItem - skrives til seperat fil: @"c:\temp\requestItems.txt";
     //todo: Lav Sortering efter navn & genre 
-    //todo: DateTime created / DateTime updated - virker måske?
-    //todo: Forspørgsler håndteres i en anden klasse end GameItem
+    //todo: Ret tekster i ConsoleWriteLines - update ... valg af index-felt på linjen
+    //todo: Menu smuksering - evt. string interpolation
+    //todo: XML comments - dokumentation 
 
 
-    // Menu
-    // Exceptionhandling
-    // - ingen fil
-    // - tom fil
-
-    // if file !exist, create file
-    // AddGame() -> AddGameID() -> Readfile(), Readfile can't read empty
-
-    // exceptionhandling på resten af menu - alle steder hvor der parses 
-    // index + 1, når du skriver til menu
-    // rettet tekster i menu ConsoleWriteLines
-
-
-
+    /// <summary>
+    /// Indeholder alle vores game objekter
+    /// </summary>
     public class GameList
     {
-
+        /// <summary>
+        /// Liste der indeholder hvert GameItem objekt
+        /// </summary>
         private List<GameItem> _gameItems = new List<GameItem>();
+        /// <summary>
+        /// Liste der indeholder hver linje læst fra filen som string
+        /// </summary>
         internal List<string> _lines = new List<string>();
 
         private string _path = @"c:\temp\gameItems.txt";
+
+        GameItem GameItem = new GameItem();
 
 
         // create-metoden (crud), der opretter et nyt spil
@@ -58,53 +54,56 @@ namespace Genspil
 
             do
             {
-                Console.Clear();
-
                 try
                 {
-                    int id = AddGameId();
-
-                    string title;
-                    string edition;
-                    string minNumberOfPlayers;
-                    string maxNumberOfPlayers;
-                    string language;
-                    string category;
-                    string condition;
-                    double price;
-                    int stock;
+                    GameItem.Id = AddGameId();
 
                     Console.WriteLine("Opret spil:");
 
                     Console.Write("Skriv navn: ");
-                    title = Console.ReadLine().ToLower();
+                    GameItem.Title = Console.ReadLine().ToLower();
 
-                    Console.Write("Tilføj evt. en undertitel eller tryk enter: ");
-                    edition = Console.ReadLine().ToLower();
+                    Console.Write("Tilføj evt. en udgave eller tryk enter: ");
+                    GameItem.Edition = Console.ReadLine().ToLower();
 
                     Console.Write("Skriv minimum antal spillere: ");
-                    minNumberOfPlayers = Console.ReadLine();
+                    GameItem.MinNumberOfPlayers = Console.ReadLine();
 
                     Console.Write("Skriv maksimum antal spillere: ");
-                    maxNumberOfPlayers = Console.ReadLine();
+                    GameItem.MaxNumberOfPlayers = Console.ReadLine();
 
                     Console.Write("Skriv spillets sprog: ");
-                    language = Console.ReadLine().ToLower();
+                    GameItem.Language = Console.ReadLine().ToLower();
 
                     Console.Write("Skriv spillets kategori: ");
-                    category = Console.ReadLine().ToLower();
+                    GameItem.Category = Console.ReadLine().ToLower();
 
                     Console.Write("Skriv spillets stand (1 - 10): ");
-                    condition = Console.ReadLine().ToLower();
+                    GameItem.Condition = Console.ReadLine().ToLower();
 
-                    Console.Write("Skriv spillets pris: ");
-                    price = double.Parse(Console.ReadLine());
+                    try
+                    {
+                        Console.Write("Skriv spillets pris: ");
+                        GameItem.Price = double.Parse(Console.ReadLine());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        throw new Exception("Pris skal udfyldes med et tal");
+                    }
 
-                    Console.Write("Skriv antal: ");
-                    stock = int.Parse(Console.ReadLine());
+                    try
+                    {
+                        Console.Write("Skriv antal: ");
+                        GameItem.Stock = int.Parse(Console.ReadLine());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        throw new Exception("Antal udfyldes med et tal");
+                    }
 
-
-                    _gameItems.Add(new GameItem(id, title, edition, minNumberOfPlayers, maxNumberOfPlayers, language, category, condition, price, stock));
+                    _gameItems.Add(new GameItem(GameItem.Id, GameItem.Title, GameItem.Edition, GameItem.MinNumberOfPlayers, GameItem.MaxNumberOfPlayers, GameItem.Language, GameItem.Category, GameItem.Condition, GameItem.Price, GameItem.Stock));
 
                 }
                 catch (Exception ex)
@@ -112,6 +111,7 @@ namespace Genspil
                     Console.WriteLine($"Error: {ex.Message}");
                     Console.WriteLine($"Indtast dit spil igen");
                     continue;
+
                 }
 
                 addGameInput = true;
@@ -125,8 +125,6 @@ namespace Genspil
         // id = sidste gameItems id + 1.
         public int AddGameId()
         {
-            ReadFile();
-
             string[] idLine = _lines.Last().Split(',');
 
             int id;
@@ -177,12 +175,13 @@ namespace Genspil
 
         public void ShowGameItems()
         {
-            ReadFile();
+
             ConvertListStringToListGameItem();
 
             // Print each element in _gameItems             
             foreach (GameItem item in _gameItems)
             {
+                //Console.WriteLine($"{0,-20}{1,-15}", item.Title, item.Edition);
                 Console.WriteLine($"{item.Id}, {item.Title}, {item.Edition}, {item.MinNumberOfPlayers} - {item.MaxNumberOfPlayers}, {item.Language}, {item.Category}, {item.Condition}, {item.Price}, {item.Stock}");
                 //Console.WriteLine($"Navn: {item.Name}, Antal spillere: {item.NumberOfPlayers}");
             }
@@ -204,25 +203,31 @@ namespace Genspil
         // Skal laves om så den sletter på ID
         public void Delete()
         {
-            ReadFile();
 
             Console.Write("Skriv hvilken linje du vil slette: ");
 
             int inputDelete;
             int.TryParse(Console.ReadLine(), out inputDelete);
 
+            inputDelete -= 1;
+
             if (inputDelete < _lines.Count)
             {
                 _lines.RemoveAt(inputDelete);
                 File.WriteAllLines(_path, _lines);
+                Console.WriteLine($"Spillet: {_lines[inputDelete]} blev slettet");
             }
+            else
+            {
+                Console.WriteLine("Ingen spil blev slettet");
+            }
+
         }
 
 
 
         public void SearchAll()
         {
-            ReadFile();
 
             Console.WriteLine("Søgning: ");
             string searchText = Console.ReadLine().ToLower();
@@ -251,38 +256,52 @@ namespace Genspil
         // WriteToFile til samme linje
         public void Update()
         {
-            int inputUpdate;
+            bool exitUpdate = false;
 
-            ReadFile();
-
-            Console.Write("Skriv nummeret på det spil, du vil opdatere: ");
-
-            int.TryParse(Console.ReadLine(), out inputUpdate);
-
-            Console.WriteLine(_lines[inputUpdate]);
-
-            if (inputUpdate >= 0 && inputUpdate < _lines.Count)
+            do
             {
-                string[] splitString = new string[2];
 
-                splitString = _lines[inputUpdate].Split(',');
+                int inputUpdate;
 
-                Console.Write("Skriv det tal, der svarer til den del, du vil opdatere: ");
+                Console.Write("Skriv nummeret på det spil, du vil opdatere: ");
 
-                int userInput;
-                int.TryParse(Console.ReadLine(), out userInput);
+                int.TryParse(Console.ReadLine(), out inputUpdate);
 
-                Console.Write("Skriv, hvad der skal opdateres: ");
+                inputUpdate -= 1;
 
-                splitString[userInput] = Console.ReadLine().ToLower();
+                if (inputUpdate >= 1 && inputUpdate < _lines.Count)
+                {
+                    Console.Write(_lines[inputUpdate]);
 
-                string joinedString = string.Join(",", splitString);
+                    string[] splitString = new string[2];
 
-                _lines[inputUpdate] = joinedString;
+                    splitString = _lines[inputUpdate].Split(',');
 
-                ConvertListStringToListGameItem();
+                    Console.Write("Skriv det tal, der svarer til den del, du vil opdatere: ");
 
-            }
+                    int userInput;
+                    int.TryParse(Console.ReadLine(), out userInput);
+
+                    Console.Write("Skriv, hvad der skal opdateres: ");
+
+                    splitString[userInput] = Console.ReadLine().ToLower();
+
+                    string joinedString = string.Join(",", splitString);
+
+                    _lines[inputUpdate] = joinedString;
+
+                    ConvertListStringToListGameItem();
+
+                    exitUpdate = true;
+                }
+                else
+                {
+                    Console.WriteLine("Du vil opdatere et spil der ikke findes på listen, vælg igen");
+                    continue;
+                }
+
+            } while (!exitUpdate);
+
         }
 
 
@@ -305,49 +324,57 @@ namespace Genspil
             {
                 try
                 {
-
                     Console.Clear();
-
-                    string title;
-                    string subtitle;
-                    string minNumberOfPlayers;
-                    string maxNumberOfPlayers;
-                    string language;
-                    string category;
-                    string condition;
-                    double price;
-                    int stock;
 
                     Console.WriteLine("Opret det første spil:");
 
                     Console.Write("Skriv navn: ");
-                    title = Console.ReadLine().ToLower();
+                    if ((GameItem.Title = Console.ReadLine().ToLower()) == "")
+                    {
+                        throw new Exception("Titlen skal udfyldes, opret spil igen");
+                    }
 
-                    Console.Write("Tilføj evt. en undertitel eller tryk enter: ");
-                    subtitle = Console.ReadLine().ToLower();
+                    Console.Write("Tilføj evt. en udgave eller tryk enter: ");
+                    GameItem.Edition = Console.ReadLine().ToLower();
 
                     Console.Write("Skriv minimum antal spillere: ");
-                    minNumberOfPlayers = Console.ReadLine();
+                    GameItem.MinNumberOfPlayers = Console.ReadLine();
 
                     Console.Write("Skriv maksimum antal spillere: ");
-                    maxNumberOfPlayers = Console.ReadLine();
+                    GameItem.MaxNumberOfPlayers = Console.ReadLine();
 
                     Console.Write("Skriv spillets sprog: ");
-                    language = Console.ReadLine().ToLower();
+                    GameItem.Language = Console.ReadLine().ToLower();
 
                     Console.Write("Skriv spillets kategori: ");
-                    category = Console.ReadLine().ToLower();
+                    GameItem.Category = Console.ReadLine().ToLower();
 
                     Console.Write("Skriv spillets stand (1 - 10): ");
-                    condition = Console.ReadLine().ToLower();
+                    GameItem.Condition = Console.ReadLine().ToLower();
 
-                    Console.Write("Skriv spillets pris: ");
-                    price = double.Parse(Console.ReadLine());
+                    try
+                    {
+                        Console.Write("Skriv spillets pris: ");
+                        GameItem.Price = double.Parse(Console.ReadLine());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        throw new Exception("Pris skal udfyldes med et tal");
+                    }
 
-                    Console.Write("Skriv antal: ");
-                    stock = int.Parse(Console.ReadLine());
+                    try
+                    {
+                        Console.Write("Skriv antal: ");
+                        GameItem.Stock = int.Parse(Console.ReadLine());
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                        throw new Exception("Antal udfyldes med et tal");
+                    }
 
-                    _gameItems.Add(new GameItem(title, subtitle, minNumberOfPlayers, maxNumberOfPlayers, language, category, condition, price, stock));
+                    _gameItems.Add(new GameItem(GameItem.Id, GameItem.Title, GameItem.Edition, GameItem.MinNumberOfPlayers, GameItem.MaxNumberOfPlayers, GameItem.Language, GameItem.Category, GameItem.Condition, GameItem.Price, GameItem.Stock));
 
                 }
                 catch (Exception ex)
@@ -355,6 +382,7 @@ namespace Genspil
                     Console.WriteLine($"Error: {ex.Message}");
                     Console.WriteLine($"Indtast dit spil igen");
                     continue;
+
                 }
 
                 addGameInput = true;
@@ -362,9 +390,6 @@ namespace Genspil
             } while (!addGameInput);
 
         }
-
-
-
 
 
         // Hjælpemetoder.
@@ -391,11 +416,11 @@ namespace Genspil
         /// <summary>
         /// Konverterer en liste af GameItem (_gameItems) til en liste af strings (_lines)
         /// </summary>
-        public void ConvertListGameItemToListString()
-        {
-            _lines.Clear();
-            _lines = _gameItems.Select(item => item.Title + "," + item.Edition + "," + item.MinNumberOfPlayers + item.MaxNumberOfPlayers + "," + item.Language + "," + item.Category + "," + item.Condition + "," + item.Price + "," + item.Stock).ToList();
-        }
+        //public void ConvertListGameItemToListString()
+        //{
+        //    _lines.Clear();
+        //    _lines = _gameItems.Select(item => item.Title + "," + item.Edition + "," + item.MinNumberOfPlayers + item.MaxNumberOfPlayers + "," + item.Language + "," + item.Category + "," + item.Condition + "," + item.Price + "," + item.Stock).ToList();
+        //}
 
 
     }

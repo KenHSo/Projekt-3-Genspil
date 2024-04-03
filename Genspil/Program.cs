@@ -17,6 +17,7 @@ namespace Genspil
 
             do
             {
+
                 Console.Clear();
 
                 Console.ResetColor();
@@ -56,26 +57,30 @@ namespace Genspil
                         exit = true;
                         break;
                     case 1: // vis
+                        game.ReadFile();
                         game.ShowGameItems();
                         break;
                     case 2: // Add
+                        game.ReadFile();
                         game.AddGame();
                         game.WriteFile();
                         Console.WriteLine("Spillet er nu gemt.");
                         break;
                     case 3: // Update
+                        game.ReadFile();
                         game.ShowGameItems();
                         game.Update();
                         game.WriteLineToFile();
                         Console.WriteLine("Spillet er opdateret");
                         break;
                     case 4: // Delete
+                        game.ReadFile();
                         game.ShowGameItems();
                         game.Delete();
                         game.WriteFile();
-                        Console.WriteLine("Spillet er slettet");
                         break;
                     case 5: // Search
+                        game.ReadFile();
                         game.SearchAll();
                         break;
                     case 6:

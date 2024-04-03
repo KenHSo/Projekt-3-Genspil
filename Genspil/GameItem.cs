@@ -10,9 +10,25 @@ namespace Genspil
 {
     public class GameItem
     {
+
+        //private string _title;
+
         // 10 attributter
         public int Id { get; set; }
+        
         public string Title { get; set; }
+        //public string Title
+        //{
+        //    get { return _title; }
+        //    set
+        //    {
+        //        if (!string.IsNullOrEmpty(value))              
+        //            _title = value;        
+        //        else
+        //            throw new Exception("Titlen skal udfyldes - opret spillet igen");
+        //    }
+        //}
+
         public string Edition { get; set; }
         public string MinNumberOfPlayers { get; set; }
         public string MaxNumberOfPlayers { get; set; }
@@ -43,7 +59,11 @@ namespace Genspil
             Stock = stock;
         }
 
-        public GameItem(string title, string subtitle, string minNumberOfPlayers, string maxNumberOfPlayers, string language, string category, string condition, double price, int stock) : this (1, title, subtitle, minNumberOfPlayers, maxNumberOfPlayers, language, category, condition, price, stock)
+        public GameItem(string title, string edition, string minNumberOfPlayers, string maxNumberOfPlayers, string language, string category, string condition, double price, int stock) : this (1, title, edition, minNumberOfPlayers, maxNumberOfPlayers, language, category, condition, price, stock)
+        {
+        }
+
+        public GameItem()
         {
         }
 
