@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Genspil
 {
-    internal class RequestItem
+    public class RequestItem
     {
         public int Id { get; set; }
         public Guid CustomerId { get; set; }
