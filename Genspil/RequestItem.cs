@@ -8,6 +8,9 @@ namespace Genspil
 {
     public class RequestItem
     {
+        /// <summary>
+        /// Det er ID'et
+        /// </summary>
         public int Id { get; set; }
         public Guid CustomerId { get; set; }
         public string Title { get; set; }
