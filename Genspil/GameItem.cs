@@ -13,7 +13,7 @@ namespace Genspil
         // 10 attributter
         public int Id { get; set; }
         public string Title { get; set; }
-        public string Subtitle { get; set; }
+        public string Edition { get; set; }
         public string MinNumberOfPlayers { get; set; }
         public string MaxNumberOfPlayers { get; set; }
         public string Language { get; set; }
@@ -29,11 +29,11 @@ namespace Genspil
         //}
 
 
-        public GameItem(int id, string title, string subtitle, string minNumberOfPlayers, string maxNumberOfPlayers, string language, string category, string condition, double price, int stock)
+        public GameItem(int id, string title, string edition, string minNumberOfPlayers, string maxNumberOfPlayers, string language, string category, string condition, double price, int stock)
         {
             Id = id;
             Title = title;
-            Subtitle = subtitle;
+            Edition = edition;
             MinNumberOfPlayers = minNumberOfPlayers;
             MaxNumberOfPlayers = maxNumberOfPlayers;
             Language = language;
@@ -43,7 +43,9 @@ namespace Genspil
             Stock = stock;
         }
 
-
+        public GameItem(string title, string subtitle, string minNumberOfPlayers, string maxNumberOfPlayers, string language, string category, string condition, double price, int stock) : this (1, title, subtitle, minNumberOfPlayers, maxNumberOfPlayers, language, category, condition, price, stock)
+        {
+        }
 
     }
 }
