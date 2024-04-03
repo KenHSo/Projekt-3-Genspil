@@ -21,6 +21,14 @@ namespace Genspil
         // DateTime Create
         // DateTime Update
 
+        /// <summary>
+        /// Constructor til RequestItem
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="customerId"></param>
+        /// <param name="title"></param>
+        /// <param name="subtitle"></param>
+        /// <param name="language"></param>
         public RequestItem(int id, Guid customerId, string title, string subtitle, string language)
         {
             Id = id;
