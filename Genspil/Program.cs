@@ -12,6 +12,11 @@ namespace Genspil
 
             game.CreateFile();
 
+            RequestList request = new RequestList();
+
+            request.CreateRequestFile();
+
+
             bool exit = false;
             int inputMenu;
 
@@ -22,7 +27,7 @@ namespace Genspil
 
                 Console.ResetColor();
                 Console.ForegroundColor = ConsoleColor.White;
-                Console.BackgroundColor = ConsoleColor.DarkCyan;
+                Console.BackgroundColor = ConsoleColor.DarkMagenta;
                 Console.WriteLine("\r\n                                                                                      \r\n ░▒▓██████▓▒░░▒▓████████▓▒░▒▓███████▓▒░ ░▒▓███████▓▒░▒▓███████▓▒░░▒▓█▓▒░▒▓█▓▒░        \r\n░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░        \r\n░▒▓█▓▒░      ░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░▒▓█▓▒░        \r\n░▒▓█▓▒▒▓███▓▒░▒▓██████▓▒░ ░▒▓█▓▒░░▒▓█▓▒░░▒▓██████▓▒░░▒▓███████▓▒░░▒▓█▓▒░▒▓█▓▒░        \r\n░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░        \r\n░▒▓█▓▒░░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░      ░▒▓█▓▒░▒▓█▓▒░        \r\n ░▒▓██████▓▒░░▒▓████████▓▒░▒▓█▓▒░░▒▓█▓▒░▒▓███████▓▒░░▒▓█▓▒░      ░▒▓█▓▒░▒▓████████▓▒░ \r\n                                                                                      \r\n                                                                                      \r\n");
                 Console.ResetColor();
 
@@ -83,20 +88,33 @@ namespace Genspil
                         game.ReadFile();
                         game.SearchAll();
                         break;
-                    case 6:
-                        Console.WriteLine("Vis alle forespørgsler - request.metode indsættes her");
+                    case 6: //Vis alle forespørgsler
+                        request.ReadFile();
+                        request.ShowRequestItems();
+                        break;                       
+                    case 7: //Tilføj forespørgsel
+                        request.ReadFile();
+                        request.AddRequest();
+                        request.WriteFile();
+                        Console.WriteLine("Forespørgslen er nu gemt.");                      
                         break;
-                    case 7:
-                        Console.WriteLine("Tilføj forespørgsel - request.metode indsættes her");
+                    case 8: // Update forespørgsel på brætspil
+                        request.ReadFile();
+                        request.ShowRequestItems();
+                        request.UpdateRequest();
+                        request.WriteLineToFile();
+                        Console.WriteLine("Forespørgslen er opdateret.");                    
                         break;
-                    case 8:
-                        Console.WriteLine("Opdatér forespørgsel - request.metode indsættes her");
+                    case 9: //sletter forespørgsel
+                        request.ReadFile();
+                        request.ShowRequestItems();
+                        request.DeleteRequest();
+                        request.WriteFile();
+                        Console.WriteLine("Forespørgsel er nu slettet.");
                         break;
-                    case 9:
-                        Console.WriteLine("Fjern forespørgsel - request.metode indsættes her");
-                        break;
-                    case 10:
-                        Console.WriteLine("Søg forespørgsel - request.metode indsættes her");
+                    case 10: //søg efter forespørgsel
+                        request.ReadFile();
+                        request.SearchAllRequestItems();                   
                         break;
                     default:
                         Console.Write("Forkert input, prøv igen!");

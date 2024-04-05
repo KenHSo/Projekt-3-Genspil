@@ -8,34 +8,32 @@ namespace Genspil
 {
     public class RequestItem
     {
-        /// <summary>
-        /// Det er ID'et
-        /// </summary>
+        //Egenskaben Id burde her hedde RequestNumber - vi retter det, hvis vi får tid.
         public int Id { get; set; }
-        public Guid CustomerId { get; set; }
         public string Title { get; set; }
-        public string Subtitle { get; set; }
+        public string Edition { get; set; }
         public string Language { get; set; }
+        public string CustomerName { get; set; }
+        public string Reference { get; set; }
+        //Det kunne være en ide med en egenskab mere, som hedder "comment".
 
         // Optional
         // DateTime Create
         // DateTime Update
 
-        /// <summary>
-        /// Constructor til RequestItem
-        /// </summary>
-        /// <param name="id"></param>
-        /// <param name="customerId"></param>
-        /// <param name="title"></param>
-        /// <param name="subtitle"></param>
-        /// <param name="language"></param>
-        public RequestItem(int id, Guid customerId, string title, string subtitle, string language)
+        public RequestItem(int id, string title, string edition, string language, string customerName, string reference)
         {
             Id = id;
-            CustomerId = customerId;
             Title = title;
-            Subtitle = subtitle;
+            Edition = edition;
             Language = language;
+            CustomerName = customerName;
+            Reference = reference;
+        }
+
+        public RequestItem() 
+        {
+
         }
     }
 }
