@@ -11,24 +11,9 @@ namespace Genspil
     public class GameItem
     {
 
-        //private string _title;
-
-        // 10 attributter
-        public int Id { get; set; }
-        
+        // 10 attributter / properties 
+        public int Id { get; set; }       
         public string Title { get; set; }
-        //public string Title
-        //{
-        //    get { return _title; }
-        //    set
-        //    {
-        //        if (!string.IsNullOrEmpty(value))              
-        //            _title = value;        
-        //        else
-        //            throw new Exception("Titlen skal udfyldes - opret spillet igen");
-        //    }
-        //}
-
         public string Edition { get; set; }
         public string MinNumberOfPlayers { get; set; }
         public string MaxNumberOfPlayers { get; set; }
@@ -37,12 +22,6 @@ namespace Genspil
         public string Condition { get; set; }
         public double Price { get; set; }
         public int Stock { get; set; }
-
-        //public string Title
-        //{
-        //    get { return _title; }
-        //    set { _title = value; }
-        //}
 
 
         public GameItem(int id, string title, string edition, string minNumberOfPlayers, string maxNumberOfPlayers, string language, string category, string condition, double price, int stock)

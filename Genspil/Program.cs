@@ -10,12 +10,20 @@ namespace Genspil
 
             GameList game = new();
 
-            game.CreateFile();
+            // Hvis ikke gameItem.txt findes, bedes den ansatte om at oprette det første spil
+            game.CreateGameFile();
 
             RequestList request = new RequestList();
 
+            // Hvis ikke requestItem.txt fil findes...
             request.CreateRequestFile();
+            // if (tid til det)
+            //   ret;
+            // Så det ikke er obligatorisk at indsætte en request første gang programmet kører
 
+
+
+            // Menu
 
             bool exit = false;
             int inputMenu;
@@ -74,19 +82,19 @@ namespace Genspil
                     case 3: // Update
                         game.ReadFile();
                         game.ShowGameItems();
-                        game.Update();
+                        game.UpdateGame();
                         game.WriteLineToFile();
                         Console.WriteLine("Spillet er opdateret");
                         break;
                     case 4: // Delete
                         game.ReadFile();
                         game.ShowGameItems();
-                        game.Delete();
+                        game.DeleteGame();
                         game.WriteFile();
                         break;
                     case 5: // Search
                         game.ReadFile();
-                        game.SearchAll();
+                        game.SearchAllGameItems();
                         break;
                     case 6: //Vis alle forespørgsler
                         request.ReadFile();
@@ -127,16 +135,6 @@ namespace Genspil
 
             } while (!exit);
 
-
-            // Liste af metoder
-            //game.AddGame();
-            //game.WriteFile();
-            //game.WriteLineToFile();
-            //game.ReadFile();
-            //game.ShowGameItems();
-            //game.Delete();
-            //game.SearchAll();
-            //game.Update();
 
             Console.ReadKey();
         }
